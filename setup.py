@@ -2,7 +2,7 @@ import setuptools
 
 setuptools.setup(
     name="torus-cli",
-    version="0.1.3",
+    version="0.9.1",
     author="Luca Albinati",
     author_email="luca.albinati@gmail.com",
     description="Command line interface for torus-engine",
