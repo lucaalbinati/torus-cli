@@ -1,3 +1,6 @@
 __pycache__/
 
 .vscode/
+
+src/torus_cli.egg-info/
+dist/

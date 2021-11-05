@@ -26,7 +26,7 @@ def print_help():
 	print()
 
 def import_and_get_object_class(obj_name):
-	module = __import__("engine.objects.{}".format(obj_name.lower()), fromlist=[obj_name.capitalize()])
+	module = __import__("torusengine.objects.{}".format(obj_name.lower()), fromlist=[obj_name.capitalize()])
 	class_ = getattr(module, obj_name.capitalize())
 	return class_
 
@@ -46,38 +46,7 @@ def parse_position_tuple(command_line_option, position_description):
 	except ValueError as e:
 		raise Exception("The values for the {} position must be integers or floats".format(position_description))
 
-def on_press(key):
-	if key == keyboard.Key.up:
-		scene.move_camera(Move.UP)
-	elif key == keyboard.Key.down:
-		scene.move_camera(Move.DOWN)
-	elif key == keyboard.Key.left:
-		scene.move_camera(Move.LEFT)
-	elif key == keyboard.Key.right:
-		scene.move_camera(Move.RIGHT)
-	elif key == keyboard.KeyCode.from_char('p'):
-		scene.status = scene.status.pressed_pause()
-		if scene.status == Status.RUN:
-			scene.statusChangeEvent.set()
-		elif scene.status == Status.PAUSE:
-			scene.statusChangeEvent.clear()
-	elif key == keyboard.KeyCode.from_char('o'):
-		curr_obj_class_name = type(scene.obj).__name__.lower()
-		curr_index = all_objects_class_name.index(curr_obj_class_name)
-		next_index = (curr_index + 1) % len(all_objects_class_name)
-		new_obj = import_and_get_object_class(all_objects_class_name[next_index])()
-		scene.change_obj(new_obj)
-	elif key == keyboard.KeyCode.from_char('.'):
-		scene.increment_light_source_intensity()
-	elif key == keyboard.KeyCode.from_char(','):
-		scene.decrement_light_source_intensity()
-	elif key == keyboard.Key.esc or key == keyboard.KeyCode.from_char('\x03') or key == keyboard.KeyCode.from_char('q'):
-		scene.status = Status.STOP
-		scene.statusChangeEvent.set()
-		return False
-
-if __name__ == "__main__":
-
+def run():
 	if "-h" in sys.argv:
 		print_help()
 		exit(0)
@@ -116,6 +85,36 @@ if __name__ == "__main__":
 
 	# Init scene
 	scene = Scene(obj, light_source, camera)
+
+	def on_press(key):
+		if key == keyboard.Key.up:
+			scene.move_camera(Move.UP)
+		elif key == keyboard.Key.down:
+			scene.move_camera(Move.DOWN)
+		elif key == keyboard.Key.left:
+			scene.move_camera(Move.LEFT)
+		elif key == keyboard.Key.right:
+			scene.move_camera(Move.RIGHT)
+		elif key == keyboard.KeyCode.from_char('p'):
+			scene.status = scene.status.pressed_pause()
+			if scene.status == Status.RUN:
+				scene.statusChangeEvent.set()
+			elif scene.status == Status.PAUSE:
+				scene.statusChangeEvent.clear()
+		elif key == keyboard.KeyCode.from_char('o'):
+			curr_obj_class_name = type(scene.obj).__name__.lower()
+			curr_index = all_objects_class_name.index(curr_obj_class_name)
+			next_index = (curr_index + 1) % len(all_objects_class_name)
+			new_obj = import_and_get_object_class(all_objects_class_name[next_index])()
+			scene.change_obj(new_obj)
+		elif key == keyboard.KeyCode.from_char('.'):
+			scene.increment_light_source_intensity()
+		elif key == keyboard.KeyCode.from_char(','):
+			scene.decrement_light_source_intensity()
+		elif key == keyboard.Key.esc or key == keyboard.KeyCode.from_char('\x03') or key == keyboard.KeyCode.from_char('q'):
+			scene.status = Status.STOP
+			scene.statusChangeEvent.set()
+			return False
 
 	# Start scene in new thread
 	thread = Thread(target=scene.start, args=[static])
