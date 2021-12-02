@@ -1,4 +1,8 @@
+import os
 import setuptools
+
+rootdir = os.path.abspath(os.path.dirname(__file__))
+long_description = open(os.path.join(rootdir, 'README.md')).read()
 
 setuptools.setup(
     name="torus-cli",
@@ -6,6 +10,7 @@ setuptools.setup(
     author="Luca Albinati",
     author_email="luca.albinati@gmail.com",
     description="Command line interface for torus-engine",
+    long_description=long_description,
     url="https://github.com/lucaalbinati/torus-cli",
     project_urls={
         "Bug Tracker": "https://github.com/lucaalbinati/torus-cli/issues",
