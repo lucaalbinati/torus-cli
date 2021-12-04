@@ -1,8 +1,8 @@
+import os
 import sys
 import numpy as np
 from threading import Thread
 from pynput import keyboard
-from torusengine.utils import list_of_all_objects
 from torusengine.scene import Scene
 from torusengine.camera import Camera
 from torusengine.light import Light
@@ -15,6 +15,13 @@ command_line_options = {
 	"-l": "light source position, as a 3 tuple: x y z (default is '10 0 0')",
 	"-c": "camera position, as a 3 tuple: x y z (default is '7 0 3')"
 }
+
+def list_of_all_objects():
+	PYTHON_EXTENSION = ".py"
+	import importlib
+	module = importlib.import_module("torusengine.objects")
+	objects_dir = module.__path__[0]	
+	return [f[:-len(PYTHON_EXTENSION)] for f in os.listdir(objects_dir) if os.path.isfile(os.path.join(objects_dir, f)) and f.endswith(PYTHON_EXTENSION) and f != "__init__.py"]
 
 all_objects_class_name = list_of_all_objects()
 DEFAULT_OBJ = "torus"
