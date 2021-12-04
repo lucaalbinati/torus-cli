@@ -6,7 +6,7 @@ long_description = open(os.path.join(rootdir, 'README.md')).read()
 
 setuptools.setup(
     name="torus-cli",
-    version="1.1.1",
+    version="1.2.0",
     author="Luca Albinati",
     author_email="luca.albinati@gmail.com",
     description="Command line interface for torus-engine",
