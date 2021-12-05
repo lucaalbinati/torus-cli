@@ -104,10 +104,8 @@ def run():
 			scene.move_camera(Move.RIGHT)
 		elif key == keyboard.KeyCode.from_char('p'):
 			scene.status = scene.status.pressed_pause()
-			if scene.status == Status.RUN:
-				scene.statusChangeEvent.set()
-			elif scene.status == Status.PAUSE:
-				scene.statusChangeEvent.clear()
+			# set the flag to signal a change
+			scene.statusChangeEvent.set()
 		elif key == keyboard.KeyCode.from_char('o'):
 			curr_obj_class_name = type(scene.obj).__name__.lower()
 			curr_index = all_objects_class_name.index(curr_obj_class_name)
@@ -126,7 +124,7 @@ def run():
 	# Start scene in new thread
 	thread = Thread(target=scene.start, args=[static])
 	thread.start()
-	
+
 	# Listen to keyboard inputs
 	if not static:
 		with keyboard.Listener(on_press=on_press) as listener:
